@@ -7,6 +7,6 @@ public interface ATCMediator {
  
     public boolean isLandingOk();
  
-    public void setLandingStatus(boolean status);
-    
+    public void setLandingStatus(Integer status);
+
 }

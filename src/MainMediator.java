@@ -10,16 +10,16 @@ public class MainMediator {
         
         //Componente 1
         Flight f1 = new Flight(atcMediator, "LATAM", "LA4542");
-            Flight f2 = new Flight(atcMediator, "GOL", "GL1273");
+        Flight f2 = new Flight(atcMediator, "GOL", "GL1273");
         
         //Componente 2
         Runway mainRunway = new Runway(atcMediator);
-        
+
+        atcMediator.registerRunway(mainRunway);
+
         atcMediator.registerFlight(f1);
         atcMediator.registerFlight(f2);
 
-        atcMediator.registerRunway(mainRunway);
-        
         
         System.out.println(">> Contato da aeronave 1....");
         f1.getReady();
