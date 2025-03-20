@@ -19,7 +19,7 @@ public class Flight implements Command {
 
     @Override
     public void land() {
-        if (atcMediator.isLandingOk()) {
+        if (atcMediator.isLandingOk(this)) {
             System.out.println("Flight " + flightNumber + " Successfully Landed.");
             atcMediator.setLandingStatus(ATC.DISPONIVEL);
         } else {
@@ -29,6 +29,14 @@ public class Flight implements Command {
 
     public void getReady() {
         System.out.println("Voo " + this.flightNumber + " da " + this.airline + " solicitando autorizacao para pouso...");
+
+        if (atcMediator.isLandingOk(this)) {
+            System.out.println("Pista liberada para pouso.");
+
+            atcMediator.reserveRunway(this);
+        } else {
+            System.out.println("Runway is busy. Wait for permission.");
+        }
     }
 
     public String getFlight() {

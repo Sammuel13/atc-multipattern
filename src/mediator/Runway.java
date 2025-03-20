@@ -8,12 +8,16 @@ package mediator;
 public class Runway implements Command {
     private ATCMediator atcMediator = null;
 
+    private Flight occupiedBy = null;
+
     private RunwayState state;
 
     public Runway(ATCMediator atcMediator) {
         this.atcMediator = atcMediator;
+    }
 
-        this.state = RunwayStateEnum.DISPONIVEL;
+    {   // INITIALIZER BLOCK
+        this.setRunwayState(1);
     }
 
 //    public void setRunwayState(RunwayState state) {
@@ -32,6 +36,7 @@ public class Runway implements Command {
                 this.state = RunwayStateEnum.INSEGURA;
                 break;
         }
+        this.state.setRunway(this);
     }
 
     public RunwayState getRunwayState() {
@@ -44,6 +49,14 @@ public class Runway implements Command {
     }
 
     public boolean isLandingOk() {
-        return false;
+        return state.isLandingOk(occupiedBy);
+    }
+
+    public void setOccupiedBy(Flight flight) {
+        this.occupiedBy = flight;
+    }
+
+    public Flight getOccupiedBy() {
+        return this.occupiedBy;
     }
 }

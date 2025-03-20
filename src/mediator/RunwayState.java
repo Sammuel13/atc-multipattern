@@ -4,6 +4,7 @@ public interface RunwayState extends Command {
 
     void land();
 
-    boolean isLandingOk();
+    boolean isLandingOk(Flight flight);
 
+    void setRunway(Runway runway);
 }
