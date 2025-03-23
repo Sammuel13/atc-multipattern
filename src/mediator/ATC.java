@@ -31,6 +31,16 @@ public class ATC implements ATCMediator {
         this.supportTeam = supportTeam;
     }
 
+    //Subscribe do Observer
+    @Override
+    public void reserveRunway(Flight currentFlight) {
+        if (this.currentFlight == null) {
+            this.currentFlight = currentFlight;
+        }
+        wait(1000, () -> waitingQueue.add(currentFlight));
+
+    }
+
     @Override
     public boolean isLandingOk(Flight flight) {
         if (currentFlight != null && currentFlight != flight) {
@@ -38,17 +48,11 @@ public class ATC implements ATCMediator {
         }
 
         if (runway.isLandingOk()) {
-            supportTeam.prepareForLanding();
+            wait(300, supportTeam::prepareForLanding);
             return true;
         }
 
         return false;
-    }
-
-    //Subscribe do Observer
-    @Override
-    public void reserveRunway(Flight currentFlight) {
-        waitingQueue.add(currentFlight);
     }
 
     private void land(Flight flight) {
@@ -56,7 +60,6 @@ public class ATC implements ATCMediator {
 
         this.currentFlight = flight;
         runway.setOccupiedBy(currentFlight);
-        runway.setRunwayState(RunwayStateEnum.INDISPONIVEL_ID);
 
         this.wait(300, supportTeam::clearLanding);
         this.wait(300, supportTeam::refuel);
@@ -79,16 +82,13 @@ public class ATC implements ATCMediator {
         runway.setRunwayState(status);
         if (status.equals(RunwayStateEnum.DISPONIVEL_ID)) {
             this.currentFlight = null;
-
-            if (!waitingQueue.isEmpty()) {
-                Flight nextFlight = waitingQueue.poll();
-                this.land(nextFlight);
-            }
         }
     }
 
     @Override
     public void start() {
-        setLandingStatus(RunwayStateEnum.DISPONIVEL_ID);
+        while (!waitingQueue.isEmpty()) {
+            this.land(waitingQueue.poll());
+        }
     }
 }
