@@ -2,48 +2,57 @@ import mediator.*;
 
 public class MainMediator {
 
-	public static void main(String[] args) {
-        ATCMediator atcMediator = new ATC();
-        
-        //Componentes 1 e 2
-        Flight f1 = new Flight(atcMediator, "LATAM", "LA4542");
-        Flight f2 = new Flight(atcMediator, "GOL", "GL1273");
-        
-        //Componente 3
-        Runway mainRunway = new Runway(atcMediator);
+        public static void main(String[] args) {
+                ATCMediator atcMediator = new ATC();
 
-        //Componente 4
-        SupportTeam supportTeam = new SupportTeam();
+                // Componentes 1 e 2 - Voos
+                Flight f1 = new Flight(atcMediator, "LATAM", "LA4542");
+                Flight f2 = new Flight(atcMediator, "GOL", "GL1273");
+                Flight f3 = new Flight(atcMediator, "AZUL", "AZ2384");
+                Flight f4 = new Flight(atcMediator, "TAM", "JJ8841");
+                Flight f5 = new Flight(atcMediator, "VOEPASS", "2Z1102");
 
-        atcMediator.registerRunway(mainRunway);
+                // Componente 3 - Pista
+                Runway mainRunway = new Runway(atcMediator);
 
-        atcMediator.registerFlight(f1);
-        atcMediator.registerFlight(f2);
+                // Componente 4 - Equipe de apoio
+                SupportTeam supportTeam = new SupportTeam();
 
-        atcMediator.registerSupportTeam(supportTeam);
+                atcMediator.registerRunway(mainRunway);
+                atcMediator.registerSupportTeam(supportTeam);
 
-        mainRunway.land();
+                atcMediator.registerFlight(f1);
+                atcMediator.registerFlight(f2);
+                atcMediator.registerFlight(f3);
+                atcMediator.registerFlight(f4);
+                atcMediator.registerFlight(f5);
 
-        System.out.println(">> Contato da aeronave 1....");
-        f1.getReady();
-        System.out.println();
-        
-        System.out.println(">> Consultando situacao da pista....");
-        mainRunway.land();
-        System.out.println();
+                // Início da simulação
+                System.out.println(">> Contato da aeronave 1....");
+                f1.getReady();
+                System.out.println();
 
-        System.out.println(">> Contato da aeronave 2....");
-        f2.getReady();
-        System.out.println();
+                System.out.println(">> Contato da aeronave 2....");
+                f2.getReady();
+                System.out.println();
 
-        System.out.println(">> Consultando situacao da pista....");
-        mainRunway.land();
-        
-        f1.land();
+                System.out.println(">> Contato da aeronave 3....");
+                f3.getReady();
+                System.out.println();
 
-        mainRunway.land();
-        f2.land();
+                System.out.println(">> Contato da aeronave 4....");
+                f4.getReady();
+                System.out.println();
 
-	}
+                System.out.println(">> Contato da aeronave 5....");
+                f5.getReady();
+                System.out.println();
 
+                // Libera a pista manualmente após cada pouso (para simulação sem delay)
+                f1.land();
+                f2.land();
+                f3.land();
+                f4.land();
+                f5.land();
+        }
 }
