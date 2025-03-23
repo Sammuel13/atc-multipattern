@@ -54,6 +54,7 @@ public class Runway implements Command {
 
     public void setOccupiedBy(Flight flight) {
         this.occupiedBy = flight;
+        setRunwayState(RunwayStateEnum.INDISPONIVEL_ID);
     }
 
     public Flight getOccupiedBy() {
