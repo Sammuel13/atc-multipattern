@@ -32,11 +32,11 @@ public class Flight implements Command {
 
         if (atcMediator.isLandingOk(this)) {
             System.out.println("Pista liberada para pouso.");
-
-            atcMediator.reserveRunway(this);
         } else {
             System.out.println("Runway is busy. Wait for permission.");
         }
+        // Se a pista estiver vazia ele pousa, se não entra na fila
+        atcMediator.reserveRunway(this);
     }
 
     public String getFlight() {
