@@ -21,7 +21,7 @@ public class Flight implements Command {
     public void land() {
         if (atcMediator.isLandingOk(this)) {
             System.out.println("Flight " + flightNumber + " Successfully Landed.");
-            atcMediator.setLandingStatus(ATC.DISPONIVEL);
+            atcMediator.setLandingStatus(RunwayStateEnum.DISPONIVEL_ID);
         } else {
             System.out.println("Waiting for landing.");
         }

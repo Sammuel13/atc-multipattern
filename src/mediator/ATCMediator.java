@@ -2,6 +2,8 @@ package mediator;
 
 public interface ATCMediator {
 
+    public void start();
+
     public void registerRunway(Runway runway);
     
     public void registerFlight(Flight flight);

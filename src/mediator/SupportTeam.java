@@ -17,5 +17,4 @@ public class SupportTeam {
     public void loadBaggage() {
         System.out.println("Equipe de apoio carregando bagagens.");
     }
-
 }

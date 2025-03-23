@@ -7,17 +7,13 @@ import java.util.Queue;
 
 public class ATC implements ATCMediator {
 
-    public static Integer INDISPONIVEL = 0;
-    public static Integer DISPONIVEL = 1;
-    public static Integer INSEGURA = 2;
-
     private Flight currentFlight;
 
     private List<Flight> flights = new ArrayList<>();
     private Runway runway;
     private SupportTeam supportTeam;
-    public boolean land;
 
+    // Observer
     private Queue<Flight> waitingQueue = new LinkedList<>();
 
     @Override
@@ -49,33 +45,50 @@ public class ATC implements ATCMediator {
         return false;
     }
 
+    //Subscribe do Observer
     @Override
     public void reserveRunway(Flight currentFlight) {
-        if (this.currentFlight != null) {
-            System.out.println("Pista ocupada.");
-            waitingQueue.add(currentFlight);
-            return;
-        }
-        this.currentFlight = currentFlight;
-        runway.setOccupiedBy(currentFlight);
-        runway.setRunwayState(INDISPONIVEL);
+        waitingQueue.add(currentFlight);
+    }
 
-        supportTeam.clearLanding();
-        supportTeam.refuel();
-        supportTeam.loadBaggage();
+    private void land(Flight flight) {
+        System.out.println("-----------------------------LAND-----------------------------");
+
+        this.currentFlight = flight;
+        runway.setOccupiedBy(currentFlight);
+        runway.setRunwayState(RunwayStateEnum.INDISPONIVEL_ID);
+
+        this.wait(300, supportTeam::clearLanding);
+        this.wait(300, supportTeam::refuel);
+        this.wait(300, supportTeam::loadBaggage);
+
+        this.wait(1000, flight::land);
+    }
+
+    private void wait(Integer ms, Runnable action) {
+        try {
+            Thread.sleep(ms);
+            action.run();
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
     public void setLandingStatus(Integer status) {
         runway.setRunwayState(status);
-        if (status.equals(DISPONIVEL)) {
+        if (status.equals(RunwayStateEnum.DISPONIVEL_ID)) {
             this.currentFlight = null;
 
             if (!waitingQueue.isEmpty()) {
                 Flight nextFlight = waitingQueue.poll();
-                this.reserveRunway(nextFlight);
-                nextFlight.land();
+                this.land(nextFlight);
             }
         }
+    }
+
+    @Override
+    public void start() {
+        setLandingStatus(RunwayStateEnum.DISPONIVEL_ID);
     }
 }

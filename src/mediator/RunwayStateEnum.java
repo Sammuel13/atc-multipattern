@@ -35,6 +35,10 @@ public enum RunwayStateEnum implements RunwayState {
         }
     };
 
+    public static Integer INDISPONIVEL_ID = 0;
+    public static Integer DISPONIVEL_ID = 1;
+    public static Integer INSEGURA_ID = 2;
+
     protected Runway runway;
 
     public void setRunway(Runway runway) {

@@ -48,11 +48,6 @@ public class MainMediator {
                 f5.getReady();
                 System.out.println();
 
-                // Libera a pista manualmente após cada pouso (para simulação sem delay)
-                f1.land();
-                f2.land();
-                f3.land();
-                f4.land();
-                f5.land();
+                atcMediator.start();
         }
 }
