@@ -40,7 +40,13 @@ public class ATC implements ATCMediator {
         if (currentFlight != null && currentFlight != flight) {
             return false;
         }
-        return runway.isLandingOk();
+
+        if (runway.isLandingOk()) {
+            supportTeam.prepareForLanding();
+            return true;
+        }
+
+        return false;
     }
 
     @Override
@@ -53,18 +59,22 @@ public class ATC implements ATCMediator {
         this.currentFlight = currentFlight;
         runway.setOccupiedBy(currentFlight);
         runway.setRunwayState(INDISPONIVEL);
+
+        supportTeam.clearLanding();
+        supportTeam.refuel();
+        supportTeam.loadBaggage();
     }
 
     @Override
     public void setLandingStatus(Integer status) {
         runway.setRunwayState(status);
-        if(status.equals(DISPONIVEL)){
+        if (status.equals(DISPONIVEL)) {
             this.currentFlight = null;
 
-            if(!waitingQueue.isEmpty()){
+            if (!waitingQueue.isEmpty()) {
                 Flight nextFlight = waitingQueue.poll();
                 this.reserveRunway(nextFlight);
-//                nextFlight.land();
+                nextFlight.land();
             }
         }
     }
